@@ -1,0 +1,40 @@
+create database Production;
+create table customer
+(
+id int identity(120,2) primary key,
+name varchar(20),
+city varchar(20),
+purchase smallmoney check(purchase>1000),
+mode_of_tranc varchar(10) default 'cash'
+);
+select * from customer;
+
+insert into customer values('Faz','Delhi',3400);
+insert into customer values('Tanu','Lucknow',9377,'online');
+insert into customer (name,city,purchase) values('Ganesh','Delhi',3499);
+insert into customer (name,city,purchase) values('Kajal','Delhi',3748);
+insert into customer (name,city,purchase) values('Chahat','Hyderbad',4509),('Karan','Jaitpur',4444);
+
+create table ordertable
+(
+orderid int identity(301,3) primary key,
+productname varchar(20),
+price smallmoney,
+customerid int references customer(id)
+);
+
+insert into ordertable values('soap',345,120),('chips',56,122),('potatoes',45,120),('Helpline',120,120);
+select * from ordertable;
+select * from customer;
+insert into ordertable values('ert',34,333);
+
+create index IX_ordertable_price on ordertable (price);
+execute sp_helpindex ordertable;
+select * from ordertable where price>300;
+drop index ordertable IX_ordertable_price;
+
+create view vw1 
+as 
+select * from customer 
+where city in (select city from customer where city='Delhi')
+select * from vw1
